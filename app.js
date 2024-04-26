@@ -6,6 +6,10 @@ import routes from "./routes/index.js";
 
 const app = express();
 
+
+console.log(app);
+
+
 app.use(cors);
 app.use(express.urlencoded({
   limit: 1024 * 1024 * 10,
