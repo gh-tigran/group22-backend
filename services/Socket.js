@@ -24,13 +24,15 @@ class Socket {
       client.userId = userId;
 
 
-      // await Users.updateUserStatus(userId, true);
+      console.log(client);
 
-      await Users.update({
-        isOnline: true
-      }, {
-        where: { id: userId }
-      });
+      if(1){
+        await Users.update({
+          isOnline: true
+        }, {
+          where: { id: userId }
+        });
+      }
       this.socket.emit('user-online', { userId })
       //online
       client.on('disconnect', async () => {
