@@ -6,7 +6,6 @@ import { Users } from "../models/index.js";
 const { JWT_SECRET } = process.env
 
 class Socket {
-
   static init(server) {
     this.socket = new SocketServer(server, {
       cors: ALLOW_CORS
@@ -22,9 +21,6 @@ class Socket {
       const { userId } = jwt.verify(authorization.replace('Bearer ', ''), JWT_SECRET);
       client.join(`user_${userId}`);
       client.userId = userId;
-
-
-      // await Users.updateUserStatus(userId, true);
 
       await Users.update({
         isOnline: true
