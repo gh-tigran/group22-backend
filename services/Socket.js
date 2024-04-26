@@ -3,62 +3,60 @@ import { ALLOW_CORS } from "../middlewares/cors.js";
 import jwt from "jsonwebtoken";
 import { Users } from "../models/index.js";
 
-const { JWT_SECRET } = process.env
+const { JWT_SECRET } = process.env;
 
 class Socket {
-
   static init(server) {
     this.socket = new SocketServer(server, {
-      cors: ALLOW_CORS
+      cors: ALLOW_CORS,
     });
 
-    this.socket.on('connect', this.#handleConnect);
+    this.socket.on("connect", this.#handleConnect);
   }
 
   static #handleConnect = async (client) => {
     try {
 
       const { authorization } = client.handshake.headers;
-      const { userId } = jwt.verify(authorization.replace('Bearer ', ''), JWT_SECRET);
+      const { userId } = jwt.verify(authorization.replace("Bearer ", ""), JWT_SECRET);
       client.join(`user_${userId}`);
       client.userId = userId;
 
-
       console.log(client);
 
-      if(1){
+      if (true) {
         await Users.update({
-          isOnline: true
+          isOnline: true,
         }, {
-          where: { id: userId }
+          where: { id: userId },
         });
       }
-      this.socket.emit('user-online', { userId })
+      this.socket.emit("user-online", { userId });
       //online
-      client.on('disconnect', async () => {
+      client.on("disconnect", async () => {
         if (!this.socket.sockets.adapter.rooms.get(`user_${userId}`)) {
           await Users.update({
             lastVisit: new Date(),
-            isOnline: false
+            isOnline: false,
           }, {
-            where: { id: userId }
+            where: { id: userId },
           });
 
-          this.socket.emit('user-offline', { userId })
+          this.socket.emit("user-offline", { userId });
         }
 
-      })
+      });
     } catch (e) {
       console.log(e);
       setTimeout(() => {
-        client.emit('error', { message: e.message })
-      }, 1000)
+        client.emit("error", { message: e.message });
+      }, 1000);
     }
-  }
+  };
 
   static emit(to, event, data = {}) {
-    this.socket.to(to).emit(event, data)
+    this.socket.to(to).emit(event, data);
   }
 }
 
-export default Socket
+export default Socket;

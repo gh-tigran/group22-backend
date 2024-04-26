@@ -5,9 +5,7 @@ import multer from "multer";
 import os from "os";
 import { v4 as uuidV4 } from "uuid";
 import path from "path";
-import HttpErrors from "http-errors";
 
-console.log(os.tmpdir());
 
 const router = new Router();
 
