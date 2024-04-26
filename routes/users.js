@@ -35,4 +35,10 @@ router.get(
     authMiddleware,
     UsersController.list,
 )
+
+router.get(
+    '/',
+    authMiddleware,
+    UsersController.list,
+)
 export default router;
