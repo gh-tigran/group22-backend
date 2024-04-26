@@ -6,9 +6,7 @@ import routes from "./routes/index.js";
 
 const app = express();
 
-
-console.log(app);
-
+console.log('hello');
 
 app.use(cors);
 app.use(express.urlencoded({
@@ -25,7 +23,6 @@ app.use(routes);
 app.use((req, res, next) => {
   next(HttpErrors(404))
 })
-
 
 app.use((err, req, res, next) => {
   err.status = err.status || 500
